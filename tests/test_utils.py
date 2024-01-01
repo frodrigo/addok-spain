@@ -12,131 +12,25 @@ from addok_spain.utils import (clean_query, extract_address, flag_housenumber,
 
 
 @pytest.mark.parametrize("input,expected", [
-    ("2 allée Jules Guesde 31068 TOULOUSE CEDEX 7",
-     "2 allée Jules Guesde 31 TOULOUSE"),
-    ("7, avenue Léon-Blum 31507 Toulouse Cedex 5",
-     "7, avenue Léon-Blum 31 Toulouse"),
-    ("159, avenue Jacques-Douzans 31604 Muret Cedex",
-     "159, avenue Jacques-Douzans 31 Muret"),
-    ("2 allée Jules Guesde BP 7015 31068 TOULOUSE",
-     "2 allée Jules Guesde 31068 TOULOUSE"),
-    ("2 allée Jules Guesde B.P. 7015 31068 TOULOUSE",
-     "2 allée Jules Guesde 31068 TOULOUSE"),
-    ("2 allée Jules Guesde B.P. N 7015 31068 TOULOUSE",
-     "2 allée Jules Guesde 31068 TOULOUSE"),
-    ("BP 80111 159, avenue Jacques-Douzans 31604 Muret",
-     "159, avenue Jacques-Douzans 31604 Muret"),
-    ("12, place de l'Hôtel-de-Ville BP 46 02150 Sissonne",
-     "12, place de l'Hôtel-de-Ville 02150 Sissonne"),
-    ("6, rue Winston-Churchill CS 40055 60321 Compiègne",
-     "6, rue Winston-Churchill 60321 Compiègne"),
-    ("BP 80111 159, avenue Jacques-Douzans 31604 Muret Cedex",
-     "159, avenue Jacques-Douzans 31 Muret"),
-    ("BP 20169 Cite administrative - 8e étage Rue Gustave-Delory 59017 Lille",
-     "Cite administrative - Rue Gustave-Delory 59017 Lille"),
-    ("12e étage Rue Gustave-Delory 59017 Lille",
-     "Rue Gustave-Delory 59017 Lille"),
-    ("12eme étage Rue Gustave-Delory 59017 Lille",
-     "Rue Gustave-Delory 59017 Lille"),
-    ("12ème étage Rue Gustave-Delory 59017 Lille",
-     "Rue Gustave-Delory 59017 Lille"),
-    ("Rue Louis des Etages", "Rue Louis des Etages"),
-    ("route express", "route express"),
-    ("air s/ l'adour", "air sur l'adour"),
-    ("air-s/-l'adour", "air sur l'adour"),
-    ("Saint Didier s/s Ecouves", "Saint Didier sous Ecouves"),
-    ("La Chapelle-aux-Brocs", "La Chapelle-aux-Brocs"),
-    ("Lieu-Dit Les Chênes", "Les Chênes"),
-    ("Lieu Dit Les Chênes", "Les Chênes"),
-    ("LieuDit Les Chênes", "Les Chênes"),
-    ("Lieux-Dits Les Chênes", "Les Chênes"),
-    ("Lieu-Dit", "Lieu-Dit"),
-    ("rue de la rente du lieu-dit la gachère",
-     "rue de la rente du lieu-dit la gachère"),
-    ("32bis Rue des Vosges93290",
-     "32bis Rue des Vosges 93290"),
-    ("20 avenue de Ségur TSA 30719 75334 Paris Cedex 07",
-     "20 avenue de Ségur 75 Paris"),
-    ("20 avenue de Ségur TSA No30719 75334 Paris Cedex 07",
-     "20 avenue de Ségur 75 Paris"),
-    ("20 avenue de Ségur TSA N 30719 75334 Paris Cedex 07",
-     "20 avenue de Ségur 75 Paris"),
-    ("20 rue saint germain CIDEX 304 89110 Poilly-sur-tholon",
-     "20 rue saint germain 89110 Poilly-sur-tholon"),
-    ("20 rue saint germain CIDEX N°304 89110 Poilly-sur-tholon",
-     "20 rue saint germain 89110 Poilly-sur-tholon"),
-    ("bp 18", ""),
+    ("Calle Cervantes, 4, 46120 Alboraia",
+     "Calle Cervantes, 4, 46120 Alboraia"),
 ])
 def test_clean_query(input, expected):
     assert clean_query(input) == expected
 
 
 @pytest.mark.parametrize("input,expected", [
-    ('Immeuble Plein-Centre 60, avenue du Centre 78180 Montigny-le-Bretonneux',
-     '60, avenue du Centre 78180 Montigny-le-Bretonneux'),
-    ('75, rue Boucicaut 92260 Fontenay-aux-Roses',
-     '75, rue Boucicaut 92260 Fontenay-aux-Roses'),
-    ('rue Boucicaut 92260 Fontenay-aux-Roses',
-     'rue Boucicaut 92260 Fontenay-aux-Roses'),
-    ("Maison de l'emploi et de la formation 13, rue de la Tuilerie 70400 Héricourt",  # noqa
-     "13, rue de la Tuilerie 70400 Héricourt"),
-    # ("Parc d'activités Innopole 166, rue Pierre-et-Marie-Curie 31670 Labège",
-    #  "166, rue Pierre-et-Marie-Curie 31670 Labège"),
-    # ("32, allée Henri-Sellier Maison des solidarités 31400 Toulouse",
-    #  "32, allée Henri-Sellier 31400 Toulouse"),
-    # ("Centre d'Affaires la Boursidiere - BP 160 - Bâtiment Maine 4ème étage Le Plessis Robinson 92357 Spain",  # noqa
-    #  "Le Plessis Robinson 92357 Spain"),
-    # ("21 Rue Clef 34 Rue Daubenton",
-    # "21 Rue Clef"),
-    ("Tribunal d'instance de Guebwiller 1, place Saint-Léger 68504 Guebwiller",
-     "1, place Saint-Léger 68504 Guebwiller"),
-    ("Centre social 3 rue du Laurier 73000 CHAMBERY",
-     "3 rue du Laurier 73000 CHAMBERY"),
-    ("Maison de la Médiation 72 Chaussée de l'Hôtel de Ville 59650 VILLENEUVE D ASCQ",  # noqa
-     "72 Chaussée de l'Hôtel de Ville 59650 VILLENEUVE D ASCQ"),
-    ("2, Grande rue 62128 Écoust-Saint-Mein",
-     "2, Grande rue 62128 Écoust-Saint-Mein"),
-    ("Le Haut de la Rue du Bois 77122 Monthyon",
-     "Le Haut de la Rue du Bois 77122 Monthyon"),
-    ("Sous la Rue du Temple 62800 Liévin",
-     "Sous la Rue du Temple 62800 Liévin"),
-    # Two spaces after housenumber.
-    ("resid goelands 28  impasse des petrels 76460 Saint-valery-en-caux",
-     "28  impasse des petrels 76460 Saint-valery-en-caux"),
-    # Two spaces before bis.
-    ("resid goelands 28  bis impasse des petrels 76460 Saint-valery-en-caux",
-     "28  bis impasse des petrels 76460 Saint-valery-en-caux"),
-    # No spaces before bis.
-    ("resid goelands 28bis impasse des petrels 76460 Saint-valery-en-caux",
-     "28bis impasse des petrels 76460 Saint-valery-en-caux"),
-    ("boulevard jean larrieu 44000 mont de marsan",
-     "boulevard jean larrieu 44000 mont de marsan"),
-    ("PARC D ACTIVITE DE SAUMATY 26 AV ANDRE ROUSSIN 13016 MARSEILLE 16",
-     "26 AV ANDRE ROUSSIN 13016 MARSEILLE 16"),
-    ("Non matching pattern",
-     "Non matching pattern"),
+    ("Miguel de Cervantes Calle Cervantes, 4, 46120 Alboraia",
+     "Calle Cervantes, 4, 46120 Alboraia"),
 ])
 def test_extract_address(input, expected):
     assert extract_address(input) == expected
 
 
 @pytest.mark.parametrize("inputs,expected", [
-    (['6', 'bis'], ['6bis']),
+    (['6', 'b'], ['6b']),
     (['6'], ['6']),
-    (['6', 'avenue'], ['6', 'avenue']),
-    (['60', 'bis', 'avenue'], ['60bis', 'avenue']),
-    (['600', 'ter', 'avenue'], ['600ter', 'avenue']),
-    (['6', 'quinquies', 'avenue'], ['6quinquies', 'avenue']),
-    (['60', 'sexies', 'avenue'], ['60sexies', 'avenue']),
-    (['600', 'quater', 'avenue'], ['600quater', 'avenue']),
-    (['6', 's', 'avenue'], ['6s', 'avenue']),
-    (['60b', 'avenue'], ['60b', 'avenue']),
-    (['600', 'b', 'avenue'], ['600b', 'avenue']),
-    (['241', 'r', 'de'], ['241', 'r', 'de']),
-    (['120', 'r', 'renard'], ['120', 'r', 'renard']),
-    (['241', 'r', 'rue'], ['241r', 'rue']),
-    (['place', 'des', 'terreaux'], ['place', 'des', 'terreaux']),
-    (['rue', 'du', 'bis'], ['rue', 'du', 'bis']),
+    (['calle', '600', 'b'], ['calle', '600b']),
 ])
 def test_glue_ordinal(inputs, expected):
     tokens = [Token(input_) for input_ in inputs]
@@ -144,45 +38,29 @@ def test_glue_ordinal(inputs, expected):
 
 
 @pytest.mark.parametrize("inputs,expected", [
-    (['6b'], True),
-    (['6'], True),
-    (['9303'], True),
-    (['93031'], False),  # postcode
-    (['6', 'avenue'], True),
-    (['60b', 'avenue'], True),
-    (['600t', 'avenue'], True),
-    (['6c', 'avenue'], True),
-    (['60s', 'avenue'], True),
-    (['600q', 'avenue'], True),
-    (['6s', 'avenue'], True),
-    (['60b', 'avenue'], True),
-    (['600b', 'avenue'], True),
-    (['241', 'r', 'de'], True),
-    (['241r', 'rue'], True),
-    (['place', 'des', 'terreaux'], False),
-    (['rue', 'du', 'bis'], False),
-    (['9', 'grand', 'rue'], True),
+    (['6'], False),
+    (['calle', '6'], False),
+    (['calle', 'baja', '93031'], False),  # postcode
+    (['calle', 'baja', '6'], True),
+    (['calle', 'baja', '60b'], True),
+    (['calle', 'baja', '600t'], True),
+    (['calle', 'baja', '6', '33000', 'Ciu'], True),
+    (['c', 'de', 'roro', '614'], True),
     ([], False),  # Case of an empty string after clean query. Should not fail.
 ])
 def test_flag_housenumber(inputs, expected):
     tokens = [Token(input_) for input_ in inputs]
     tokens = list(flag_housenumber(tokens))
     assert tokens == inputs
-    if inputs:
-        assert (tokens[0].kind == 'housenumber') == expected
+    token = next(filter(lambda token: token[0] == '6', tokens or []), None)
+    assert ((token and token.kind) == 'housenumber') == expected
 
 
-@pytest.mark.parametrize("input,expected", [
-    ('60bis', '60b'),
-    ('60BIS', '60b'),
-    ('60ter', '60t'),
-    ('4terre', '4terre'),
-    ('60quater', '60q'),
-    ('60 bis', '60 bis'),
-    ('bis', 'bis'),
-])
-def test_fold_ordinal(input, expected):
-    assert fold_ordinal(Token(input)) == expected
+# @pytest.mark.parametrize("input,expected", [
+#     ('60bis', '60b'),
+# ])
+# def test_fold_ordinal(input, expected):
+#     assert fold_ordinal(Token(input)) == expected
 
 
 @pytest.mark.parametrize("input,expected", [
@@ -200,12 +78,12 @@ def test_index_housenumbers_use_processors(config):
         'id': 'xxxx',
         '_id': 'yyyy',
         'type': 'street',
-        'name': 'rue des Lilas',
+        'name': 'calle des Lilas',
         'city': 'Paris',
         'lat': '49.32545',
         'lon': '4.2565',
         'housenumbers': {
-            '1 bis': {
+            '1 b': {
                 'lat': '48.325451',
                 'lon': '2.25651'
             }
@@ -213,23 +91,25 @@ def test_index_housenumbers_use_processors(config):
     }
     process_documents(json.dumps(doc))
     stored = get_document('d|yyyy')
-    assert stored['housenumbers']['1b']['raw'] == '1 bis'
+    assert stored['housenumbers']['1b']['raw'] == '1 b'
 
 
 @pytest.mark.parametrize("input,expected", [
-    ('rue du 8 mai troyes', False),
-    ('8 rue du 8 mai troyes', '8'),
-    ('3 rue du 8 mai troyes', '3'),
-    ('3 bis rue du 8 mai troyes', '3 bis'),
-    ('3 bis r du 8 mai troyes', '3 bis'),
-    ('3bis r du 8 mai troyes', '3 bis'),
+    ('calle 1 de mayo, troyes', False),
+    ('calle 1 de mayo, 1, troyes', '1'),
+    ('calle 1 de mayo, 3, troyes', '3'),
+    ('calle 1 de mayo, 3 b, troyes', '3 b'),
+    ('calle 1 de mayo, 3, 33000 troyes', '3'),
+    ('calle 1 de mayo, 3 b, 33000 troyes', '3 b'),
+    ('c 1 de mayo, 3 b, troyes', '3 b'),
+    ('c 1 de mayo, 3b, troyes', '3 b'),
 ])
 def test_match_housenumber(input, expected):
     doc = {
         'id': 'xxxx',
         '_id': 'yyyy',
         'type': 'street',
-        'name': 'rue du 8 Mai',
+        'name': 'calle 1 de mayo',
         'city': 'Troyes',
         'lat': '49.32545',
         'lon': '4.2565',
@@ -238,11 +118,11 @@ def test_match_housenumber(input, expected):
                 'lat': '48.325451',
                 'lon': '2.25651'
             },
-            '3 bis': {
+            '3 b': {
                 'lat': '48.325451',
                 'lon': '2.25651'
             },
-            '8': {
+            '1': {
                 'lat': '48.325451',
                 'lon': '2.25651'
             },
@@ -261,12 +141,12 @@ def test_match_housenumber_with_multiple_tokens(config):
         'id': 'xxxx',
         '_id': 'yyyy',
         'type': 'street',
-        'name': 'rue du 8 Mai',
+        'name': 'calle 1 de mayo',
         'city': 'Troyes',
         'lat': '49.32545',
         'lon': '4.2565',
         'housenumbers': {
-            '8': {
+            '1': {
                 'lat': '48.8',
                 'lon': '2.25651'
             },
@@ -281,13 +161,13 @@ def test_match_housenumber_with_multiple_tokens(config):
         }
     }
     process_documents(json.dumps(doc))
-    result = search('8 rue du 8 mai')[0]
-    assert result.housenumber == '8'
+    result = search('calle 1 de mayo, 1')[0]
+    assert result.housenumber == '1'
     assert result.lat == '48.8'
-    result = search('10 rue du 8 mai')[0]
+    result = search('calle 1 de mayo, 10')[0]
     assert result.housenumber == '10'
     assert result.lat == '48.10'
-    result = search('18 rue du 8 mai')[0]
+    result = search('calle 1 de mayo, 18')[0]
     assert result.housenumber == '18'
     assert result.lat == '48.18'
 
@@ -297,13 +177,13 @@ def test_make_labels(config):
         'id': 'xxxx',
         '_id': 'yyyy',
         'type': 'street',
-        'name': 'rue des Lilas',
+        'name': 'calle des Lilas',
         'city': 'Paris',
         'postcode': '75010',
         'lat': '49.32545',
         'lon': '4.2565',
         'housenumbers': {
-            '1 bis': {
+            '1 b': {
                 'lat': '48.325451',
                 'lon': '2.25651'
             }
@@ -311,17 +191,17 @@ def test_make_labels(config):
     }
     process_documents(json.dumps(doc))
     result = Result(get_document('d|yyyy'))
-    result.housenumber = '1 bis'  # Simulate match_housenumber
+    result.housenumber = '1 b'  # Simulate match_housenumber
     make_labels(None, result)
     assert result.labels == [
-        '1 bis rue des Lilas 75010 Paris',
-        'rue des Lilas 75010 Paris',
-        '1 bis rue des Lilas 75010',
-        'rue des Lilas 75010',
-        '1 bis rue des Lilas Paris',
-        'rue des Lilas Paris',
-        '1 bis rue des Lilas',
-        'rue des Lilas'
+        'calle des Lilas, 1 b, 75010 Paris',
+        'calle des Lilas, 75010 Paris',
+        'calle des Lilas, 1 b, 75010',
+        'calle des Lilas, 75010',
+        'calle des Lilas, 1 b, Paris',
+        'calle des Lilas, Paris',
+        'calle des Lilas, 1 b',
+        'calle des Lilas'
     ]
 
 
