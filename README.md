@@ -1,8 +1,8 @@
-# Addok plugin for France specifics
+# Addok plugin for Spain specifics
 
 ## Installation
 
-    pip install addok-france
+    pip install addok-spain
 
 
 ## Configuration
@@ -11,23 +11,23 @@
 
     QUERY_PROCESSORS_PYPATHS = [
         …,
-        "addok_france.extract_address",
-        "addok_france.clean_query",
+        "addok_spain.extract_address",
+        "addok_spain.clean_query",
     ]
 
 - Add PROCESSORS_PYPATHS
 
     PROCESSORS_PYPATHS = [
         …,
-        "addok_france.glue_ordinal",
-        "addok_france.fold_ordinal",
-        "addok_france.flag_housenumber",
+        "addok_spain.glue_ordinal",
+        "addok_spain.fold_ordinal",
+        "addok_spain.flag_housenumber",
         …,
     ]
 
-- Replace default `make_labels` by France dedicated one:
+- Replace default `make_labels` by Spain dedicated one:
 
     SEARCH_RESULT_PROCESSORS_PYPATHS = [
-        'addok_france.make_labels',
+        'addok_spain.make_labels',
         …,
     ]

@@ -6,7 +6,7 @@ from addok.batch import process_documents
 from addok.core import search, Result
 from addok.ds import get_document
 from addok.helpers.text import Token
-from addok_france.utils import (clean_query, extract_address, flag_housenumber,
+from addok_spain.utils import (clean_query, extract_address, flag_housenumber,
                                 fold_ordinal, glue_ordinal, make_labels,
                                 remove_leading_zeros)
 
@@ -84,8 +84,8 @@ def test_clean_query(input, expected):
     #  "166, rue Pierre-et-Marie-Curie 31670 Labège"),
     # ("32, allée Henri-Sellier Maison des solidarités 31400 Toulouse",
     #  "32, allée Henri-Sellier 31400 Toulouse"),
-    # ("Centre d'Affaires la Boursidiere - BP 160 - Bâtiment Maine 4ème étage Le Plessis Robinson 92357 France",  # noqa
-    #  "Le Plessis Robinson 92357 France"),
+    # ("Centre d'Affaires la Boursidiere - BP 160 - Bâtiment Maine 4ème étage Le Plessis Robinson 92357 Spain",  # noqa
+    #  "Le Plessis Robinson 92357 Spain"),
     # ("21 Rue Clef 34 Rue Daubenton",
     # "21 Rue Clef"),
     ("Tribunal d'instance de Guebwiller 1, place Saint-Léger 68504 Guebwiller",

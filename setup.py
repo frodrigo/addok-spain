@@ -19,12 +19,12 @@ with open('requirements.txt', encoding='utf-8') as reqs:
     install_requires = [l for l in reqs.read().split('\n') if is_pkg(l)]
 
 setup(
-    name='addok-france',
+    name='addok-spain',
     version=".".join(map(str, VERSION)),
-    description="Add France specific string processors.",
+    description="Add Spain specific string processors.",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/etalab/addok-france',
+    url='https://github.com/etalab/addok-spain',
     author='Yohan Boniface',
     author_email='yohan.boniface@data.gouv.fr',
     license='WTFPL',
@@ -41,10 +41,10 @@ setup(
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],
-    keywords='addok geocoding france plugin',
+    keywords='addok geocoding spain plugin',
     packages=find_packages(exclude=['tests']),
     install_requires=install_requires,
     extras_require={'test': ['pytest']},
     include_package_data=True,
-    entry_points={'addok.ext': ['france=addok_france']},
+    entry_points={'addok.ext': ['spain=addok_spain']},
 )
